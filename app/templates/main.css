@@ -1,0 +1,22 @@
+header {
+    background-color: #6a9c9e;
+}
+
+h1 {
+    text-align: center;
+}
+
+ul {
+    text-align: center;
+    list-style-type: none;
+    display: inline;
+    color: black;
+}
+
+table.table {
+    background-color: black;
+}
+
+table.table_header {
+    color: white;
+}

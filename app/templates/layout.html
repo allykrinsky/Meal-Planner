@@ -1,25 +1,40 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Flask app</title>
-        <link rel="stylesheet" href="../static/css/main.css">
-      </head>
-  <body>
-    <header>
-      <div class="container">
-        <h1 class="logo">Meal Planner</h1>
-        <strong><nav>
-          <ul class="menu">
-            <li><a href="/mealplanner.html">My Plan</a></li>
-            <li><a href="/mylists.html">My Lists</a></li>
-            <li><a href="/myrecipes.html">My Recipes</a></li>
-          </ul>
-        </nav></strong>
-      </div>
-    </header>
-        <div class="container">
-            {% block content %}
-            {% endblock %}
-        </div>
-  </body>
+<!doctype html>
+<html lang="eng">
+<head>
+  <title>Meal Planner</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    header {
+      background-color: #6a9c9e;
+      padding: 8px;
+    }
+    h1 {
+        text-align: center;
+    }
+
+    ul {
+        text-align: center;
+        list-style-type: none;
+        display: inline;
+        color: black;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1> Meal Planner</h1>
+    <ul>
+      <li>
+        <a href="/">My Plan</a>
+        <a href="/mylists">My Lists</a>
+        <a href="/myrecipes">My Recipes</a>
+      </li> <br>
+    </ul>
+  </header>
+  <div class="container">
+    <br><br><br>
+    {% block body %}{% endblock %}
+</div>
+</body>
+
 </html>

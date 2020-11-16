@@ -1,12 +1,13 @@
-from mealplanner import db #this might be a problem not sure yet
+from app import db #this might be a problem not sure yet
 
-class MyPlan(db.Model):
+class myPlan(db.Model):
     __tablename__ = 'myPlan'
+    __bind_key__ = 'myPlan'
     mealID = db.Column(db.Integer, primary_key=True)
     meal = db.Column(db.Text, nullable=False)
-    date = db.Colum(db.DateTime, nullable=False)
+    date = db.Column(db.Text, nullable=False)
     recipeID = db.Column(db.Integer, nullable=False)
-    #ingredients = db.Colum(db.Text) --> create new recipe 
+    
 
     def __init__(self, mealID, meal, date, recipeID, ingredients):
         self.mealID = mealID
@@ -17,23 +18,23 @@ class MyPlan(db.Model):
 
 class myFridge(db.Model):
     __tablename__ = 'myFridge'
-    ingredientID = db.Colum(db,Integer, nullable=False)
-    ingredient = db.Colum(db.Text, nullable=False)
-    qty = db.Colum(db.Text, nullable)
+    ingredientID = db.Column(db.Integer, primary_key=True, nullable=False)
+    ingredient = db.Column(db.Text, nullable=False)
+    qty = db.Column(db.Text, nullable=False)
 
     def __init__(self, ingredientID, ingredient, qty):
         self.ingredientID = ingredientID
         self.ingredient = ingredient
         self.qty = qty
 
-class recipes(db.Model):
-    __tablename__ = 'recipes'
-    recipeID = db.Colum(db.Integer, primary_key=True, index=True)
-    recipe = db.Colum(db.Text, nullable=False)
-    ingredient = db.Colum(db.Text, nullable=False)
-    qty = db.Colum(db.Text, nullable=False)
+class myRecipes(db.Model):
+    __tablename__ = 'myRecipes'
+    recipeID = db.Column(db.Integer, primary_key=True, index=True)
+    recipe = db.Column(db.Text, nullable=False)
+    ingredient = db.Column(db.Text, nullable=False)
+    qty = db.Column(db.Text, nullable=False)
 
-    def __init__(self, recipeID, recipe ingredient, qty):
+    def __init__(self, recipeID, recipe, ingredient, qty):
             self.recipeID = recipeID
             self.recipe = recipe
             self.ingredient = ingredient
@@ -41,9 +42,10 @@ class recipes(db.Model):
 
 class myGroceryList(db.Model):
     __tablename__ = 'myGroceryList'
-    ingredient = db.Colum(db.Text, nullable=False)
-    qty = db.Colum(db.Text, nullable=False)
-    store = db.Colum(db.Text)
+    id = db.Column(db.Integer, primary_key=True)
+    ingredient = db.Column(db.Text, nullable=False)
+    qty = db.Column(db.Text, nullable=False)
+    store = db.Column(db.Text)
 
     def __init__(self, ingredient, qty, store):
             self.ingredient = ingredient

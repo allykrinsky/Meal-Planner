@@ -1,16 +1,29 @@
 {% extends "layout.html" %}
-{% block content %}
-  <div class="home">
-    <h1>A Python product</h1>
-    <p>This website was built with Python via the Flask framework.</p>
-  </div>
+{% block body %}
+  <body>
+    <h1>My Plan</h1>
+    <table class='table'> 
+      <tr class='table_header' >
+        {% for header in headings %}
+        <th> {{header}}</th>
+        {% endfor %}
+      </tr>
+        {% for row in data %}
+        <tr class= 'table_row'>
+          {% for cell in row %}
+          <td class = 'table_row'>{{cell}}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tr>
+      
+    </table>
+    <form method='POST' action= '/'>
+      <label>Meal Name: </label>
+      <input type='text' name='mealname'>
+      <input type='submit' value='Submit'>
+    </form>
+
+  </body>
+
 {% endblock %}
-<!DOCTYPE html>
-<html>
-    <body>
-        <div class='home'>
-            <h1>Meal Planner</h1>
-            <p>Lets plan some meals, I'm Hungry!</p>
-        </div>
-    </body>
-</html>
