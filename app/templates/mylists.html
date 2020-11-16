@@ -1,7 +1,52 @@
 {% extends "layout.html" %}
-{% block content %}
-  <div class="home">
-    <h1>A Python product</h1>
-    <p>This website was built with Python via the Flask framework.</p>
+{% block body %}
+
+<div class='container'>
+  <div class='floatLeft'>
+    <h1>My Grocery List</h1>
+    <table class='table'> 
+      <tr class='table_header' >
+        {% for header in headings %}
+        <th> {{header}}</th>
+        {% endfor %}
+      </tr>
+        {% for row in data %}
+        <tr class= 'table_row'>
+          {% for cell in row %}
+          <td class = 'table_row'>{{cell}}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tr>
+    </table>
   </div>
+  <div class='floatRight'>
+    <h1>My Fridge</h1>
+    <table class='table'> 
+      <tr class='table_header' >
+        {% for header in headings %}
+        <th> {{header}}</th>
+        {% endfor %}
+      </tr>
+        {% for row in data %}
+        <tr class= 'table_row'>
+          {% for cell in row %}
+          <td class = 'table_row'>{{cell}}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tr>
+    </table>
+  </div>
+</div>
+<br><br><br>
+<form method='POST' action= '/mylists'>
+  <label>Item: </label>
+  <input type='text' name='item'><br>
+  <label>Quantity: </label>
+  <input type='text' name='qty'><br>
+  <label>Store: </label>
+  <input type='text' name='store'><br>
+  <input type='submit' formmethod='post' value='Submit'>
+</form>
 {% endblock %}

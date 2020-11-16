@@ -1,20 +1,18 @@
-from app import db #this might be a problem not sure yet
+from app import db 
 
 class myPlan(db.Model):
     __tablename__ = 'myPlan'
-    __bind_key__ = 'myPlan'
     mealID = db.Column(db.Integer, primary_key=True)
     meal = db.Column(db.Text, nullable=False)
     date = db.Column(db.Text, nullable=False)
     recipeID = db.Column(db.Integer, nullable=False)
     
 
-    def __init__(self, mealID, meal, date, recipeID, ingredients):
+    def __init__(self, mealID, meal, date, recipeID):
         self.mealID = mealID
         self.meal = meal
         self.date = date
         self.recipeID = recipeID
-        self.ingredients = ingredients
 
 class myFridge(db.Model):
     __tablename__ = 'myFridge'
