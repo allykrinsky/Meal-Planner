@@ -3,7 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from app import app
 from app.models import myPlan
 from app.models import myFridge
-from app.models import myRecipes
+from app.models import myRec
+from app.models import myRecList
 from app.models import myGroceryList
 import pandas as pd 
 import sys
@@ -62,6 +63,26 @@ def mylists():
 
 @app.route('/myrecipes', methods=['GET', 'POST'])
 def myrecipes():
-    return render_template('myrecipes.html')
+    
+    headings = ("Recipe Name")
+    data = db.session.query(myRecList.name).all()
+
+    if request.method == 'POST' : ## and is button:
+        #input = request.form.get('name')
+        #sys.stdout.write(str(input))
+        input = 'White Chocolate Cranberry Cookies (Gluten Free) - What\'s In The Pan?'
+        id = db.session.execute("Select recipeID From myRecList Where name=:param", {'param':input})
+        
+        return recipe_results(id.fetchone()[0])
+        
+    return render_template('myrecipes.html', headings=headings, data=data)
+
+@app.route('/recipe_results', methods=['GET','POST'])
+def recipe_results(id):
+    
+    headings = ("Quantity", "Ingredient")
+    data = db.session.execute("Select qty, ingredient From myRec Where recipeID=:param", {'param':id})
+    
+    return render_template('recipe_results.html', headings=headings, data=data)
 
 

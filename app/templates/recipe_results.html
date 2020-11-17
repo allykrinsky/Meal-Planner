@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<table class='table'> 
+    <tr class='table_header' >
+    {% for header in headings %}
+    <th> {{header}}</th>
+    {% endfor %}
+    </tr>
+    {% for row in data %}
+    <tr class= 'table_row'>
+        {% for cell in row %}
+        <td class = 'table_row'>{{cell}}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    </tr>
+</table>
+
+
+{% endblock %}

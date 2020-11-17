@@ -25,18 +25,29 @@ class myFridge(db.Model):
         self.ingredient = ingredient
         self.qty = qty
 
-class myRecipes(db.Model):
-    __tablename__ = 'myRecipes'
+class myRecList(db.Model):
+    __tablename__ = 'myRecList'
     recipeID = db.Column(db.Integer, primary_key=True, index=True)
-    recipe = db.Column(db.Text, nullable=False)
+    name = db.Column(db.Text, nullable=False)
+    url = db.Column(db.Text, nullable=False)
+
+    def __init__(self, recipeID, name, url):
+        self.recipeID = recipeID
+        self.name = name
+        self.url = url
+
+class myRec(db.Model):
+    __tablename__ = 'myRec'
+    index = db.Column(db.Integer, primary_key=True, index=True)
+    recipeID = db.Column(db.Integer, nullable=False)
     ingredient = db.Column(db.Text, nullable=False)
     qty = db.Column(db.Text, nullable=False)
 
-    def __init__(self, recipeID, recipe, ingredient, qty):
+    def __init__(self, recipeID,  ingredient, qty):
             self.recipeID = recipeID
-            self.recipe = recipe
             self.ingredient = ingredient
             self.qty = qty
+
 
 class myGroceryList(db.Model):
     __tablename__ = 'myGroceryList'
