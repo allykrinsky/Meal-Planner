@@ -16,7 +16,7 @@ class myPlan(db.Model):
 
 class myFridge(db.Model):
     __tablename__ = 'myFridge'
-    ingredientID = db.Column(db.Integer, primary_key=True, nullable=False)
+    ingredientID = db.Column(db.Integer, primary_key=True, nullable=False, unique=False)
     ingredient = db.Column(db.Text, nullable=False)
     qty = db.Column(db.Text, nullable=False)
 

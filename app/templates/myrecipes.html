@@ -1,26 +1,24 @@
 {% extends "layout.html" %}
 {% block body %}
-<div class='container'></div>
-  <div class='floatLeft'>
-    <h1>My Recipes</h1>
-    <table class='table'> 
-      <tr class='table_header' >
-        <th> {{header}}</th>
-      </tr>
-        {% for row in data %}
-        <tr class= 'table_row'>
-          {% for cell in row %}
-          <td class = 'table_row'>
-            <form method="POST">
-              <button>'{{cell}}'</button>
-            </form>
-          </td>
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </tr>
-    </table>
-  </div>
-  
-</div>
+
+<h1>My Recipes</h1>
+<table class='table'> 
+  <tr class='table_header' >
+    <th> {{header}}</th>
+  </tr>
+    {% for row in data %}
+    <tr class= 'table_row'>
+      {% for cell in row %}
+      <td class = 'table_row'>
+        <form method="POST">
+          <button class='btn'>'{{cell}}'</button>
+        </form>
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tr>
+</table>
+
+
 {% endblock %}

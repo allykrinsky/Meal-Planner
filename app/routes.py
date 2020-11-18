@@ -20,25 +20,46 @@ def create_tables():
 
 @app.route('/', methods=['GET', 'POST'])
 def myplan():
-    headings = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    data = (
-        ('Breakfast', 'Breakfast', 'Breakfast', 'Breakfast', 'Breakfast', 'Breakfast', 'Breakfast'),
-        ('Lunch','Lunch', 'Lunch', 'Lunch', 'Lunch', 'Lunch', 'Lunch'),
-        ('Dinner', 'Dinner', 'Dinner', 'Dinner', 'Dinner', 'Dinner', 'Dinner')
-    )
-    
-    #insert
-    if request.method == 'POST':
-        mealID = 3
-        meal = request.form['mealname']
-        sys.stdout.write(meal)
-        date = '11/15'
-        recipeID = 1
-        me = myPlan(mealID, meal, date, recipeID)
-        db.session.add(me)
+    def formatQuery(temp):
+        row = []
+        for el in temp:
+            row.append(str(el).strip("',()"))
+        return row
+
+    def getID(date, meal):
+        dates = {'Monday':'1', 'Tuesday':'2', 'Wednesday':'3', 'Thursday':'4', 'Friday':'5', 'Saturday':'6', 'Sunday':'7'}
+        meals = {'Breakfast':'1', 'Lunch':'2', 'Dinner':'3'}
+        return int(meals.get(meal) + dates.get(date))
+
+    def calcData():
+        data = []
+        for i in [1,  2, 3]:
+            temp = db.session.execute("Select meal From myPlan Where mealID/10=:param", {'param':i})
+            row = formatQuery(temp)
+            data.append(row)    
+
+        return data
+
+    def update(name, date, time):
+        mealID = getID(date, time)
+        meal = name
+        date = date 
+        recipeID = 1 #UPDATE if recipe in db then add recipeID else create new
+        db.session.query(myPlan).filter(myPlan.mealID == mealID).update({'meal':meal, 'recipeID':recipeID})
+
         db.session.commit()
+
+    headings = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     
-    return render_template('mealplanner.html', headings=headings, data=data)
+    if request.method == 'POST':
+        name = request.form['name']
+        date = request.form['date']
+        meal = request.form['meal']
+        
+        update(name, date, meal)
+
+
+    return render_template('mealplanner.html', headings=headings, data=calcData())
 
 
 @app.route('/mylists', methods=['GET', 'POST'])
@@ -63,14 +84,14 @@ def mylists():
 
 @app.route('/myrecipes', methods=['GET', 'POST'])
 def myrecipes():
-    
+
     headings = ("Recipe Name")
     data = db.session.query(myRecList.name).all()
 
-    if request.method == 'POST' : ## and is button:
+    if request.method == 'POST':
         #input = request.form.get('name')
         #sys.stdout.write(str(input))
-        input = 'White Chocolate Cranberry Cookies (Gluten Free) - What\'s In The Pan?'
+        input = 'White Chocolate Cranberry Cookies (Gluten Free)  '
         id = db.session.execute("Select recipeID From myRecList Where name=:param", {'param':input})
         
         return recipe_results(id.fetchone()[0])

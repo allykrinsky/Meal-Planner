@@ -11,7 +11,7 @@
         {% for row in data %}
         <tr class= 'table_row'>
           {% for cell in row %}
-          <td class = 'table_row'>{{cell}}</td>
+          <td class = 'table_cell'>{{cell}}</td>
           {% endfor %}
         </tr>
         {% endfor %}
@@ -19,8 +19,21 @@
       
     </table>
     <form method='POST' action= '/'>
-      <label>Meal Name: </label>
-      <input type='text' name='mealname'>
+      <label>Add to Plan: </label><br>
+      <label>Meal: </label>
+      <input type='text' name='name'>
+      <label>Date: </label>
+      <select name='date'>
+        {% for header in headings %}
+        <option> {{header}}</option>
+        {% endfor %}
+      </select>
+      <label>Meal: </label>
+        <select name='meal'>
+          <option value='Breakfast'>Breakfast</option>
+          <option value='Lunch'>Lunch</option>
+          <option value='Dinner'>Dinner</option>
+        </select>
       <input type='submit' formmethod='post' value='Submit'>
     </form>
 
