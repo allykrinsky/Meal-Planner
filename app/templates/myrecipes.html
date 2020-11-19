@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% block body %}
-
 <h1>My Recipes</h1>
 <table class='table'> 
   <tr class='table_header' >
@@ -8,13 +7,13 @@
   </tr>
     {% for row in data %}
     <tr class= 'table_row'>
-      {% for cell in row %}
       <td class = 'table_row'>
         <form method="POST">
-          <button class='btn'>'{{cell}}'</button>
+          {% for cell in row %}
+          <input type='submit' name='name', value= '{{ cell }}'>
+          {% endfor %}
         </form>
       </td>
-      {% endfor %}
     </tr>
     {% endfor %}
   </tr>

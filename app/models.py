@@ -20,8 +20,7 @@ class myFridge(db.Model):
     ingredient = db.Column(db.Text, nullable=False)
     qty = db.Column(db.Text, nullable=False)
 
-    def __init__(self, ingredientID, ingredient, qty):
-        self.ingredientID = ingredientID
+    def __init__(self, ingredient, qty):
         self.ingredient = ingredient
         self.qty = qty
 

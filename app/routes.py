@@ -66,21 +66,29 @@ def myplan():
 def mylists():
     
     headings = ("Items", "Quatity", "Store")
+    headings2 = ("Items", "Quatity")
     data = db.session.query(myGroceryList.ingredient, myGroceryList.qty, myGroceryList.store).all() #add more rows
+    data2 = db.session.query(myFridge.ingredient, myFridge.qty).all()
 
     #insert
     if request.method == 'POST':
         ingredient = request.form['item']
         qty = request.form['qty']
-        store = request.form['store']
-        me = myGroceryList(ingredient, qty, store)
+        if request.form.get("grocery"):
+            store = request.form['store']
+            me = myGroceryList(ingredient, qty, store)
+
+        if request.form.get("fridge"):
+            me = myFridge(ingredient, qty)
+            
         db.session.add(me)
         db.session.commit()
 
         data = db.session.query(myGroceryList.ingredient, myGroceryList.qty, myGroceryList.store).all()
-        return render_template('mylists.html', headings=headings, data=data)
+        data2 = db.session.query(myFridge.ingredient, myFridge.qty).all()
+        return render_template('mylists.html', headings=headings, headings2=headings2, data=data, data2=data2)
 
-    return render_template('mylists.html', headings=headings, data=data)
+    return render_template('mylists.html', headings=headings, headings2=headings2, data=data, data2=data2)
 
 @app.route('/myrecipes', methods=['GET', 'POST'])
 def myrecipes():
@@ -89,11 +97,8 @@ def myrecipes():
     data = db.session.query(myRecList.name).all()
 
     if request.method == 'POST':
-        #input = request.form.get('name')
-        #sys.stdout.write(str(input))
-        input = 'White Chocolate Cranberry Cookies (Gluten Free)  '
+        input = request.form['name']
         id = db.session.execute("Select recipeID From myRecList Where name=:param", {'param':input})
-        
         return recipe_results(id.fetchone()[0])
         
     return render_template('myrecipes.html', headings=headings, data=data)

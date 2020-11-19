@@ -18,17 +18,26 @@
         </tr>
         {% endfor %}
       </tr>
-    </table>
+    </table><br>
+    <form method='POST' action= '/mylists'>
+      <label>Item: </label>
+      <input type='text' name='item'><br>
+      <label>Quantity: </label>
+      <input type='text' name='qty'><br>
+      <label>Store: </label>
+      <input type='text' name='store'><br>
+      <button type='submit' name='grocery' value='Submit'>Submit</button>
+    </form><br>
   </div>
   <div class='floatRight'>
     <h1>My Fridge</h1>
     <table class='table'> 
       <tr class='table_header' >
-        {% for header in headings %}
+        {% for header in headings2 %}
         <th> {{header}}</th>
         {% endfor %}
       </tr>
-        {% for row in data %}
+        {% for row in data2 %}
           <tr class= 'table_row'>
             {% for cell in row %}
             <td class = 'table_row'>{{cell}}</td>
@@ -37,16 +46,14 @@
         {% endfor %}
       </tr>
     </table>
+    <form method='POST' action= '/mylists'>
+      <label>Item: </label>
+      <input type='text' name='item'><br>
+      <label>Quantity: </label>
+      <input type='text' name='qty'><br>
+      <button type='submit' name='fridge' value='Submit'>Submit</button>
+    </form>
   </div>
 </div>
 <br><br><br>
-<form method='POST' action= '/mylists'>
-  <label>Item: </label>
-  <input type='text' name='item'><br>
-  <label>Quantity: </label>
-  <input type='text' name='qty'><br>
-  <label>Store: </label>
-  <input type='text' name='store'><br>
-  <input type='submit' formmethod='post' value='Submit'>
-</form>
 {% endblock %}
