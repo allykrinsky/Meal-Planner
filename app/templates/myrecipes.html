@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 {% block body %}
 <h1>My Recipes</h1>
+<form method='POST'>
+  <button type='submit' name='add_recipe' value='submit'>Add New Recipe</button>
+</form>
 <table class='table'> 
   <tr class='table_header' >
     <th> {{header}}</th>
@@ -17,7 +20,8 @@
     </tr>
     {% endfor %}
   </tr>
-</table>
+</table><br>
+
 
 
 {% endblock %}

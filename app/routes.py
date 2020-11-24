@@ -65,23 +65,35 @@ def myplan():
 @app.route('/mylists', methods=['GET', 'POST'])
 def mylists():
     
-    headings = ("Items", "Quatity", "Store")
+    headings = (" ", "Items", "Quatity", "Store")
     headings2 = ("Items", "Quatity")
     data = db.session.query(myGroceryList.ingredient, myGroceryList.qty, myGroceryList.store).all() #add more rows
     data2 = db.session.query(myFridge.ingredient, myFridge.qty).all()
 
-    #insert
+    #buttons
     if request.method == 'POST':
-        ingredient = request.form['item']
-        qty = request.form['qty']
-        if request.form.get("grocery"):
-            store = request.form['store']
-            me = myGroceryList(ingredient, qty, store)
 
-        if request.form.get("fridge"):
-            me = myFridge(ingredient, qty)
+        if request.form.get('remove'):
+            input = request.form['value']
+            sys.stdout.write(str(input))
+            #db.session.query(myGroceryList).filter(myGroceryList.name==input).delete()
+            db.session.execute("Delete From myGrceryList Where name=:param", {'param':input})
+
+        else :
+            ingredient = request.form['item']
+            qty = request.form['qty']
+            if request.form.get("grocery"):
+                store = request.form['store']
+                me = myGroceryList(ingredient, qty, store)
+                
+
+            if request.form.get("fridge"):
+                me = myFridge(ingredient, qty)
+                
+        
+            db.session.add(me)
             
-        db.session.add(me)
+        
         db.session.commit()
 
         data = db.session.query(myGroceryList.ingredient, myGroceryList.qty, myGroceryList.store).all()
@@ -97,6 +109,9 @@ def myrecipes():
     data = db.session.query(myRecList.name).all()
 
     if request.method == 'POST':
+        if request.form.get('add_recipe') == 'submit':
+            return render_template('new_rec.html')
+
         input = request.form['name']
         id = db.session.execute("Select recipeID From myRecList Where name=:param", {'param':input})
         return recipe_results(id.fetchone()[0])
@@ -110,5 +125,34 @@ def recipe_results(id):
     data = db.session.execute("Select qty, ingredient From myRec Where recipeID=:param", {'param':id})
     
     return render_template('recipe_results.html', headings=headings, data=data)
+
+@app.route('/new_rec', methods=['GET', 'POST'])
+def new_rec():
+
+    headings = ("Quantity", "Ingredient")
+
+    name = request.form['recipe_name']
+    url = request.form['url']
+    qty = request.form['qty']
+    item = request.form['item']
+
+    if request.method == 'POST':
+        if db.session.execute("Select recipeID From myRecList Where name=:param", {'param':name}).first() == None:
+            db.session.add(myRecList(name, url))
+            db.session.commit()
+        
+        recipeID = db.session.execute("Select recipeID From myRecList Where name=:param", {'param':name}).fetchone()[0]
+        
+        me = myRec(recipeID, item, qty)
+        db.session.add(me)
+        db.session.commit()
+        data = db.session.execute("Select qty, ingredient From myRec Where recipeID=:param", {'param':recipeID})
+        
+
+        return render_template('new_rec.html', headings=headings, data=data)
+    
+    data = db.session.execute("Select * From myRec Where recipeID=:param", {'param': recipeID})
+    
+    return render_template('new_rec.html', headings=headings, data=data, name=name)
 
 

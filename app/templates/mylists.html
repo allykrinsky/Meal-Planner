@@ -12,8 +12,9 @@
       </tr>
         {% for row in data %}
         <tr class= 'table_row'>
+          <td class='remove'><button name='remove'value='{{cell}}'>remove</button></td>
           {% for cell in row %}
-          <td class = 'table_row'>{{cell}}</td>
+          <td class = 'table_cell'>{{cell}}</td>
           {% endfor %}
         </tr>
         {% endfor %}

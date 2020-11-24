@@ -28,10 +28,9 @@ class myRecList(db.Model):
     __tablename__ = 'myRecList'
     recipeID = db.Column(db.Integer, primary_key=True, index=True)
     name = db.Column(db.Text, nullable=False)
-    url = db.Column(db.Text, nullable=False)
+    url = db.Column(db.Text, nullable=True)
 
-    def __init__(self, recipeID, name, url):
-        self.recipeID = recipeID
+    def __init__(self, name, url):
         self.name = name
         self.url = url
 

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>{{name}}</h1>
+<table class='table'> 
+    <tr class='table_header' >
+      {% for header in headings %}
+      <th> {{header}}</th>
+      {% endfor %}
+    </tr>
+      {% for row in data %}
+        <tr class= 'table_row'>
+          {% for cell in row %}
+          <td class = 'table_row'>{{cell}}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tr>
+  </table>
+
+<form method='POST' action= '/new_rec'>
+    <label>Recipe Name: </label>
+    <input type='text' name='recipe_name'>
+    <label>URL (if applicable): </label>
+    <input type='text' name='url'><br>
+    <label>Item: </label>
+    <input type='text' name='item'>
+    <label>Quantity: </label>
+    <input type='text' name='qty'><br>
+    <button type='submit' name='add' value='Submit'>Add More</button><br>
+  </form>
+
+  {% endblock %}
