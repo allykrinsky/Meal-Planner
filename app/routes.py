@@ -12,13 +12,44 @@ import csv
 import numpy as np 
 from sqlalchemy import create_engine
 from app import session
-from app import db 
+from app import db
+
+
+userID = None
+@app.template_global()
+def set_user(user):
+    global userID
+    userID = user
+
 
 @app.before_first_request
 def create_tables():
     db.create_all()
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET','POST'])
+def login():
+    error = None
+    if request.method == 'POST' and request.form.get("login"):
+        user = request.form['username']
+        password = request.form['password']
+        # if username doesnt exist
+        if  db.session.execute("Select username From User Where username=:param", {'param':user}).first() == None:
+            error = 'This username does not exist'
+        # if user exitst
+        else :
+            # if password is incorrect
+            if db.session.execute("Select password From User Where username=:param", {'param':user}).first() != password: 
+                error = 'Invalid Credentials. Please try again.'
+            # if password is correct
+            else:
+                set_user(db.session.execute("Select id From User Where username=:param", {'param':user}).first())
+                return redirect('/mealplanner')
+                
+    
+    return render_template('login.html', error=error)
+
+
+@app.route('/mealplanner', methods=['GET', 'POST'])
 def myplan():
     def formatQuery(temp):
         row = []
@@ -34,7 +65,7 @@ def myplan():
     def calcData():
         data = []
         for i in [1,  2, 3]:
-            temp = db.session.execute("Select meal From myPlan Where mealID/10=:param", {'param':i})
+            temp = db.session.execute("Select meal From myPlan Where mealID/10=:param and userID=:id", {'param':i, 'id':userID})
             row = formatQuery(temp)
             data.append(row)    
 
@@ -51,7 +82,7 @@ def myplan():
 
     headings = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form.get('submit'):
         name = request.form['name']
         date = request.form['date']
         meal = request.form['meal']
@@ -75,8 +106,6 @@ def mylists():
 
         if request.form.get('remove'):
             input = request.form['value']
-            sys.stdout.write(str(input))
-            #db.session.query(myGroceryList).filter(myGroceryList.name==input).delete()
             db.session.execute("Delete From myGrceryList Where name=:param", {'param':input})
 
         else :
