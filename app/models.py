@@ -1,12 +1,15 @@
 from app import db 
+from sqlalchemy import *
+from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
 
 class User(db.Model):
     __tablename__ = 'User'
-    id = db.Column(db.Integer, primary_key=True) 
+    id = db.Column(db.Integer, primary_key=True, index=True) 
     username = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
 
-    def __init__(self, id, username, password):
+    def __init__(self, username, password):
         self.username = username
         self.password = password
 
@@ -79,7 +82,4 @@ class myGroceryList(db.Model):
             self.store = store
             self.userID = userID
 
-
-    
-
-     
+db.create_all()

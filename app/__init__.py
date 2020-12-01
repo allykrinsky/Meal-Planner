@@ -11,11 +11,16 @@ class DontBeSilly(sqlalchemy.interfaces.PoolListener):
         cur.execute("SET SESSION sql_mode='TRADITIONAL'")
         cur = None
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mealplanner.db'
+app.secret_key = "ally"
+
 db = SQLAlchemy(app)
-engine = create_engine('sqlite:///mealplanner.db?check_same_thread=False', listeners=[DontBeSilly()])
+engine = create_engine('sqlite:///mealplanner.db?check_same_thread=False')
 Session = sessionmaker(bind=engine)
-session = Session()
+conn = engine.connect()
+sess = Session(bind=conn)
+
 
 from app import routes

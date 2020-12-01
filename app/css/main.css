@@ -1,0 +1,44 @@
+.navbar navbar-expand-lg navbar-light bg-light {
+  align-content: center;
+}
+.card {
+  padding: 8px;
+}
+
+body {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+h1 {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  text-align: center;
+}
+table {
+  position: relative;
+  text-align: center;
+  
+}
+.floatLeft { 
+  position: relative;
+  float: left;
+  width: 49%;
+  padding: 0px;
+  
+}
+.floatRight {
+  position: relative;
+  float: right;
+  width: 49%;
+  padding: 0px; 
+}
+form{
+  position: static;
+  display: block;
+}
+.container { 
+  display: inline-block;
+  vertical-align: middle;
+   
+}
+tr:nth-child(even) {background: #CCC}
+tr:nth-child(odd) {background: #FFF}

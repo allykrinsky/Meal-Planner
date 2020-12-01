@@ -3,8 +3,11 @@
 {% block body %}
 <div class="column is-4 is-offset-4">
     <h3 class="title">Login</h3>
+    {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
     <div class="box">
-        <form method="POST" action='/mealplanner'>
+        <form method="POST">
             <div class="field">
                 <div class="control">
                     <input class="input is-large" type="user" name="username" placeholder="Username" autofocus="">
@@ -22,7 +25,8 @@
                     Remember me
                 </label>
             </div>
-            <button class="button is-block is-info is-large is-fullwidth" name='login'>Login</button>
+            <button class="button is-block is-info is-large is-fullwidth" name='login' value='submit'>Login</button>
+            <button class="button is-block is-info is-large is-fullwidth" name='signup' value='submit'>Sign Up</button>
         </form>
     </div>
 </div>

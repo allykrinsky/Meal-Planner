@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, g, send_file, jsonify
+from flask import Flask, render_template, request, redirect, session, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from app import app
 from app.models import myPlan
@@ -6,47 +6,53 @@ from app.models import myFridge
 from app.models import myRec
 from app.models import myRecList
 from app.models import myGroceryList
+from app.models import User
 import pandas as pd 
 import sys
 import csv
 import numpy as np 
 from sqlalchemy import create_engine
-from app import session
 from app import db
 
-
-userID = None
-@app.template_global()
-def set_user(user):
-    global userID
-    userID = user
-
-
-@app.before_first_request
-def create_tables():
-    db.create_all()
 
 @app.route('/', methods=['GET','POST'])
 def login():
     error = None
-    if request.method == 'POST' and request.form.get("login"):
+    if request.method == 'POST' and request.form.get('login'):
         user = request.form['username']
-        password = request.form['password']
-        # if username doesnt exist
-        if  db.session.execute("Select username From User Where username=:param", {'param':user}).first() == None:
-            error = 'This username does not exist'
-        # if user exitst
+        password_attempt = request.form['password']
+        #if username exists
+        username = db.session.query(User.username).filter_by(username=user).first()
+        if bool(username) :
+            password = db.session.query(User.password).filter_by(username=user).one()
+            if password == password_attempt:
+                userID= db.session.execute("Select id From User Where username=:user", {'user':user}).fetchone()[0]
+                session['userID'] = userID
+
+                return redirect(url_for('myplan'))   
+            else :
+                error = "Password Incorrect. Please try again."
         else :
-            # if password is incorrect
-            if db.session.execute("Select password From User Where username=:param", {'param':user}).first() != password: 
-                error = 'Invalid Credentials. Please try again.'
-            # if password is correct
-            else:
-                set_user(db.session.execute("Select id From User Where username=:param", {'param':user}).first())
-                return redirect('/mealplanner')
-                
+            error = "Username does not exist. Please Sign up."
+
+    if request.method == 'POST' and request.form.get('signup'):   
+
+        return redirect(url_for('sign_up'))  
+       
     
     return render_template('login.html', error=error)
+
+@app.route('/signup', methods=['GET', 'POST'])
+def sign_up():
+
+    if request.method == 'POST':
+        user = request.form['username']
+        password = request.form['password'] 
+        db.session.add(User(user, password))
+        db.session.commit()
+        return redirect(url_for('login'))
+
+    return render_template('signup.html')
 
 
 @app.route('/mealplanner', methods=['GET', 'POST'])
@@ -65,7 +71,7 @@ def myplan():
     def calcData():
         data = []
         for i in [1,  2, 3]:
-            temp = db.session.execute("Select meal From myPlan Where mealID/10=:param and userID=:id", {'param':i, 'id':userID})
+            temp = db.session.execute("Select meal From myPlan Where mealID/10=:param and userID=:id", {'param':i, 'id':session['userID']})
             row = formatQuery(temp)
             data.append(row)    
 
@@ -113,11 +119,11 @@ def mylists():
             qty = request.form['qty']
             if request.form.get("grocery"):
                 store = request.form['store']
-                me = myGroceryList(ingredient, qty, store)
+                me = myGroceryList(ingredient, qty, store, session['userID'])
                 
 
             if request.form.get("fridge"):
-                me = myFridge(ingredient, qty)
+                me = myFridge(ingredient, qty, session['userID'])
                 
         
             db.session.add(me)
@@ -167,12 +173,12 @@ def new_rec():
 
     if request.method == 'POST':
         if db.session.execute("Select recipeID From myRecList Where name=:param", {'param':name}).first() == None:
-            db.session.add(myRecList(name, url))
+            db.session.add(myRecList(name, url, session['userID']))
             db.session.commit()
         
         recipeID = db.session.execute("Select recipeID From myRecList Where name=:param", {'param':name}).fetchone()[0]
         
-        me = myRec(recipeID, item, qty)
+        me = myRec(recipeID, item, qty, session['userID'])
         db.session.add(me)
         db.session.commit()
         data = db.session.execute("Select qty, ingredient From myRec Where recipeID=:param", {'param':recipeID})
@@ -183,5 +189,3 @@ def new_rec():
     data = db.session.execute("Select * From myRec Where recipeID=:param", {'param': recipeID})
     
     return render_template('new_rec.html', headings=headings, data=data, name=name)
-
-
