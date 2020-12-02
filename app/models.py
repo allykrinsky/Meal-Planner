@@ -1,7 +1,7 @@
 from app import db 
 from sqlalchemy import *
 from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
+
 
 class User(db.Model):
     __tablename__ = 'User'

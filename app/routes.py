@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask import Flask, render_template, request, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from app import app
 from app.models import myPlan
@@ -25,7 +25,7 @@ def login():
         username = db.session.query(User.username).filter_by(username=user).first()
         if bool(username) :
             password = db.session.query(User.password).filter_by(username=user).one()
-            if password == password_attempt:
+            if str(password[0]) == password_attempt:
                 userID= db.session.execute("Select id From User Where username=:user", {'user':user}).fetchone()[0]
                 session['userID'] = userID
 
