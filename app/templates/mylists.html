@@ -12,7 +12,12 @@
       </tr>
         {% for row in data %}
         <tr class= 'table_row'>
-          <td class='remove'><button name='remove'value='{{cell}}'>remove</button></td>
+          <td class='remove'>
+            <form method='POST' action="{{ url_for('remove_gl') }}">
+              <input type='hidden' value='{{ row.ingredient }}' name='remove_item'/>
+              <input type='Submit' value='Remove'/>
+            </form>
+          </td>
           {% for cell in row %}
           <td class = 'table_cell'>{{cell}}</td>
           {% endfor %}
@@ -40,6 +45,12 @@
       </tr>
         {% for row in data2 %}
           <tr class= 'table_row'>
+            <td class='remove'>
+              <form method='POST' action="{{ url_for('remove_fr') }}">
+                <input type='hidden' value='{{ row.ingredient }}' name='remove_item'/>
+                <input type='Submit' value='Remove'/>
+              </form>
+            </td>
             {% for cell in row %}
             <td class = 'table_row'>{{cell}}</td>
           {% endfor %}

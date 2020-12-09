@@ -99,6 +99,20 @@ def myplan():
     return render_template('mealplanner.html', headings=headings, data=calcData())
 
 
+@app.route('/remove_gl', methods=['POST'])
+def remove_gl():
+    sys.stdout.write(str(request.form['remove_item']))
+    db.session.execute("Delete From myGroceryList Where ingredient=:param", {'param':request.form['remove_item']})
+    db.session.commit()
+    return redirect(url_for('mylists'))
+
+@app.route('/remove_fr', methods=['POST'])
+def remove_fr():
+    sys.stdout.write(str(request.form['remove_item']))
+    db.session.execute("Delete From myFridge Where ingredient=:param", {'param':request.form['remove_item']})
+    db.session.commit()
+    return redirect(url_for('mylists'))
+
 @app.route('/mylists', methods=['GET', 'POST'])
 def mylists():
     
@@ -110,24 +124,18 @@ def mylists():
     #buttons
     if request.method == 'POST':
 
-        if request.form.get('remove'):
-            input = request.form['value']
-            db.session.execute("Delete From myGrceryList Where name=:param", {'param':input})
-
-        else :
-            ingredient = request.form['item']
-            qty = request.form['qty']
-            if request.form.get("grocery"):
-                store = request.form['store']
-                me = myGroceryList(ingredient, qty, store, session['userID'])
-                
-
-            if request.form.get("fridge"):
-                me = myFridge(ingredient, qty, session['userID'])
-                
-        
-            db.session.add(me)
+        ingredient = request.form['item']
+        qty = request.form['qty']
+        if request.form.get("grocery"):
+            store = request.form['store']
+            me = myGroceryList(ingredient, qty, store, session['userID'])
             
+
+        if request.form.get("fridge"):
+            me = myFridge(ingredient, qty, session['userID'])
+            
+    
+        db.session.add(me)
         
         db.session.commit()
 
