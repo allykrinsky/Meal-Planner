@@ -14,6 +14,11 @@ import numpy as np
 from sqlalchemy import create_engine
 from app import db
 
+@app.route('/logout', methods=['GET','POST'])
+def logout():
+    session['userID'] = None
+
+    return redirect(url_for('login'))  
 
 @app.route('/', methods=['GET','POST'])
 def login():

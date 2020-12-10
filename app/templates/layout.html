@@ -20,8 +20,14 @@
             <a class="nav-link active" href="/myrecipes">My Recipes</a>
           </li>
         </ul>
-        <h1>Meal Planner</h1>
-        <a class="nav-link active" href="/">Log Out</a>
+        <h1>Meal Planner</h1> <br>
+        <form method='POST' action="{{ url_for('login') }}">
+          <input type='Submit' value='Log In'/>
+        </form> <br>
+        <form method='POST' action="{{ url_for('logout') }}">
+          <input type='Submit' value='Log Out'/>
+        </form>
+        
         
     </nav>
   </header>

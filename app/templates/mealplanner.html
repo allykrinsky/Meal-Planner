@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-  <body>
+<div class='container'>
     <h1>My Plan</h1>
     <table class='table'> 
       <tr class='table_header' >
@@ -18,25 +18,29 @@
       </tr>
       
     </table>
-    <form method='POST'>
-      <label>Add to Plan: </label><br>
-      <label>Meal: </label>
-      <input type='text' name='name'>
-      <label>Date: </label>
-      <select name='date'>
-        {% for header in headings %}
-        <option> {{header}}</option>
-        {% endfor %}
-      </select>
-      <label>Meal: </label>
-        <select name='meal'>
-          <option value='Breakfast'>Breakfast</option>
-          <option value='Lunch'>Lunch</option>
-          <option value='Dinner'>Dinner</option>
-        </select>
-      <button type='submit' name ='submit' value='submit'>Submit</button>
+    <form class='form-horizontal' method='POST'>
+      <div class="form-group">
+        <label>Add to Plan: </label><br>
+        <label class="col-sm-2 control-label">Meal Name</label>
+        <input type='text' class='form-control' name='name' placeholder="Ex. Avocado Toast">
+        <br>
+        <label class="col-sm-2 control-label">Date</label>
+        <select class='form-control' name='date'>
+          {% for header in headings %}
+          <option> {{header}}</option>
+          {% endfor %}
+        </select><br>
+        <labelclass="col-sm-2 control-label">Meal Time </label>
+          <select class='form-control' name='meal'>
+            <option value='Breakfast'>Breakfast</option>
+            <option value='Lunch'>Lunch</option>
+            <option value='Dinner'>Dinner</option>
+          </select>
+          <br>
+        <button type='submit' class='btn' name ='submit' value='submit'>Submit</button>
+    </div>
     </form>
 
-  </body>
+  </div>
 
 {% endblock %}
